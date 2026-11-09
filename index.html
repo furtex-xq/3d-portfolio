@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>nochevvsky — 3D-модели для Roblox на заказ</title>
+<meta name="description" content="Делаю 3D-модели в Blender под ваш заказ: персонажи, предметы, интерьер и локации, готовые к Roblox Studio. Покрутите работы прямо в браузере.">
+<meta name="theme-color" content="#130F22">
+<meta property="og:title" content="nochevvsky — 3D-модели для Roblox на заказ">
+<meta property="og:description" content="Персонажи, предметы, интерьер и локации. Blender → Roblox Studio. Покрутите модели в 3D прямо на сайте.">
+<meta property="og:image" content="assets/og.jpg">
+<meta property="og:type" content="website">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Onest:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=1">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<a class="skip" href="#catalog">К каталогу моделей</a>
+
+<header class="top">
+  <a class="brand" href="#top" aria-label="nochevvsky — наверх">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 28 9v14l-12 7L4 23V9z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M4 9l12 7 12-7M16 16v14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></svg>
+    <span>nochevvsky</span>
+  </a>
+  <nav class="nav" aria-label="Разделы">
+    <a href="#catalog">3D-каталог</a>
+    <a href="#renders">Рендеры</a>
+    <a href="#order">Как заказать</a>
+  </nav>
+  <a class="btn btn-small" href="https://t.me/VoxyG" target="_blank" rel="noopener">Написать</a>
+</header>
+
+<main id="top">
+  <!-- Тур: липкая 3D-сцена, поверх которой листаются главы -->
+  <section class="tour" aria-label="Избранные модели">
+    <div class="stage" aria-hidden="true">
+      <div class="stage-glow"></div>
+      <div class="stage-word"><span id="stageWord">nochevvsky</span></div>
+      <canvas id="stageCanvas"></canvas>
+      <div class="stage-hint" id="stageHint">
+        <svg viewBox="0 0 24 24"><path d="M4 12h16M4 12l4-4M4 12l4 4M20 12l-4-4M20 12l-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Потяните модель, чтобы покрутить
+      </div>
+      <div class="stage-count"><span id="stageNum">1</span> / <span id="stageTotal">6</span></div>
+      <div class="stage-loader" id="stageLoader"><i></i></div>
+    </div>
+
+    <div class="chapters">
+      <article class="chapter hero" data-model="spiders-captain" data-word="nochevvsky">
+        <p class="eyebrow">Blender → Roblox Studio</p>
+        <h1 class="hero-title">
+          <span class="line"><span>3D-модели</span></span>
+          <span class="line"><span>для вашей</span></span>
+          <span class="line"><span class="accent">Roblox-игры</span></span>
+        </h1>
+        <p class="lead">Делаю на заказ персонажей, предметы, интерьер и целые локации — в стиле вашей игры и сразу готовыми для Studio. Всё, что на этой странице, можно покрутить.</p>
+        <div class="cta-row">
+          <a class="btn" href="https://t.me/VoxyG" target="_blank" rel="noopener">Заказать модель в Telegram</a>
+          <a class="btn btn-ghost" href="#catalog">Смотреть работы</a>
+        </div>
+        <div class="scroll-cue" aria-hidden="true"><i></i>Листайте вниз</div>
+      </article>
+
+      <article class="chapter" data-model="cat-cat" data-word="Кот">
+        <p class="eyebrow">Персонаж</p>
+        <h2>Кот</h2>
+        <p>Текстуры меха, отдельные лапы, хвост и голова под анимацию. Глаза, усы и подушечки лап — отдельными деталями.</p>
+        <p class="spec" data-spec="cat-cat"></p>
+      </article>
+
+      <article class="chapter" data-model="items-cake" data-word="Торт">
+        <p class="eyebrow">Еда и сладости</p>
+        <h2>Торт</h2>
+        <p>Свечи с огоньками, клубника с семечками, потёки глазури и посыпка. Много мелочей — и модель всё равно лёгкая для игры.</p>
+        <p class="spec" data-spec="items-cake"></p>
+      </article>
+
+      <article class="chapter" data-model="shoes-sneakerb" data-word="Кеды">
+        <p class="eyebrow">Аксессуар</p>
+        <h2>Кроссовок</h2>
+        <p>Шнуровка, люверсы, язычок и рифлёная подошва. Ткань и резина на текстурах.</p>
+        <p class="spec" data-spec="shoes-sneakerb"></p>
+      </article>
+
+      <article class="chapter" data-model="items-crown" data-word="Лут">
+        <p class="eyebrow">Предметы и лут</p>
+        <h2>Корона</h2>
+        <p>Награда для победителя: металлический блеск, камни, бархат внутри.</p>
+        <p class="spec" data-spec="items-crown"></p>
+      </article>
+
+      <article class="chapter" data-model="vacuum-robotvacuum" data-word="Дом">
+        <p class="eyebrow">Интерьер</p>
+        <h2>Робот-пылесос</h2>
+        <p>Техника и мебель для домашних локаций: от кружки до холодильника. Можно сделать и «врага», и транспорт.</p>
+        <p class="spec" data-spec="vacuum-robotvacuum"></p>
+        <a class="btn btn-ghost" href="#catalog">Все 3D-модели</a>
+      </article>
+    </div>
+  </section>
+
+  <section class="catalog section" id="catalog" aria-labelledby="catalogTitle">
+    <div class="section-head">
+      <p class="eyebrow">3D-каталог</p>
+      <h2 id="catalogTitle"><span id="modelCount">124</span> модели, которые можно покрутить</h2>
+      <p class="section-sub">Нажмите на любую — откроется 3D-просмотр. На телефоне крутите пальцем, двумя пальцами — приближайте.</p>
+    </div>
+    <div class="chips" role="tablist" aria-label="Категории" id="chips"></div>
+    <ul class="grid" id="grid"></ul>
+  </section>
+
+  <section class="renders section" id="renders" aria-labelledby="rendersTitle">
+    <div class="section-head">
+      <p class="eyebrow">Рендеры</p>
+      <h2 id="rendersTitle">Коллекции для симуляторов</h2>
+      <p class="section-sub">Яйца питомцев, гантели, катапульты, сундуки и залы — наборы с редкостями от обычной до мифической.</p>
+    </div>
+    <div id="renderGroups"></div>
+  </section>
+
+  <section class="order section" id="order" aria-labelledby="orderTitle">
+    <div class="section-head">
+      <p class="eyebrow">Как заказать</p>
+      <h2 id="orderTitle">От идеи до файла в Studio — за день</h2>
+    </div>
+    <ol class="steps">
+      <li><b>Напишите, что нужно</b><span>Модель, стиль игры, цвета. Скриншот или картинка-референс очень помогает.</span></li>
+      <li><b>Договариваемся о цене</b><span>Выбираем уровень детализации и срок. Простые заказы — за несколько часов.</span></li>
+      <li><b>Делаю в Blender</b><span>Вручную, с аккуратной сеткой. Показываю превью, если нужно — правлю.</span></li>
+      <li><b>Получаете файлы</b><span><code>.rbxm</code> для Roblox Studio и <code>.fbx</code> / <code>.obj</code> для других движков.</span></li>
+    </ol>
+
+    <div class="tiers">
+      <article class="tier">
+        <h3>Обычное</h3>
+        <p class="price">от 19 ₽</p>
+        <p>Простая форма, 1–2 цвета, без мелких деталей. Максимально лёгкая — для симуляторов с кучей предметов.</p>
+      </article>
+      <article class="tier">
+        <h3>Стандарт</h3>
+        <p class="price">от 49 ₽</p>
+        <p>Гладкая форма, узоры и 2–3 цвета, аккуратные детали и пропорции.</p>
+      </article>
+      <article class="tier tier-top">
+        <h3>Качественное</h3>
+        <p class="price">от 99 ₽</p>
+        <p>Детальная проработка, текстуры, свечение и эффекты, несколько расцветок.</p>
+      </article>
+    </div>
+    <p class="note">Персонажи, наборы и целые локации считаются отдельно — напишите, обсудим.</p>
+  </section>
+
+  <section class="contact section" id="contact" aria-labelledby="contactTitle">
+    <p class="eyebrow">Контакты</p>
+    <h2 id="contactTitle" class="contact-title">Нужна модель?<br><a href="https://t.me/VoxyG" target="_blank" rel="noopener">Напишите мне</a></h2>
+    <ul class="contacts">
+      <li><a href="https://t.me/VoxyG" target="_blank" rel="noopener"><span>Telegram</span><b>@VoxyG</b></a></li>
+      <li><a href="https://funpay.com/users/15278620/" target="_blank" rel="noopener"><span>FunPay</span><b>Готовые лоты</b></a></li>
+      <li><a href="https://instagram.com/nochevvsky" target="_blank" rel="noopener"><span>Instagram</span><b>@nochevvsky</b></a></li>
+    </ul>
+  </section>
+</main>
+
+<footer class="foot">
+  <span>© <span id="year">2026</span> nochevvsky · 3D-модели на заказ</span>
+  <a href="#top">Наверх ↑</a>
+</footer>
+
+<!-- 3D-просмотр модели -->
+<dialog class="viewer" id="viewer" aria-labelledby="viewerTitle">
+  <div class="viewer-stage">
+    <canvas id="viewerCanvas"></canvas>
+    <div class="stage-loader" id="viewerLoader"><i></i></div>
+  </div>
+  <div class="viewer-bar">
+    <div class="viewer-info">
+      <p class="eyebrow" id="viewerCat"></p>
+      <h2 id="viewerTitle"></h2>
+      <p class="spec" id="viewerSpec"></p>
+    </div>
+    <div class="viewer-actions">
+      <button class="icon-btn" id="viewerPrev" aria-label="Предыдущая модель"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" /></svg></button>
+      <button class="icon-btn" id="viewerNext" aria-label="Следующая модель"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" /></svg></button>
+      <a class="btn btn-small" href="https://t.me/VoxyG" target="_blank" rel="noopener">Хочу похожую</a>
+    </div>
+  </div>
+  <button class="icon-btn viewer-close" id="viewerClose" aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+</dialog>
+
+<!-- Просмотр рендера -->
+<dialog class="lightbox" id="lightbox" aria-label="Рендер">
+  <img id="lbImg" alt="">
+  <p class="lb-cap" id="lbCap"></p>
+  <button class="icon-btn lb-prev" id="lbPrev" aria-label="Предыдущий"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" /></svg></button>
+  <button class="icon-btn lb-next" id="lbNext" aria-label="Следующий"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" /></svg></button>
+  <button class="icon-btn viewer-close" id="lbClose" aria-label="Закрыть"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+</dialog>
+
+<noscript><p class="noscript">Для 3D-просмотра включите JavaScript.</p></noscript>
+<script type="module" src="app.js?v=1"></script>
+</body>
+</html>
