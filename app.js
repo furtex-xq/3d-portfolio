@@ -55,6 +55,7 @@ function fitted(src) {
   obj.position.set(-c.x, -box.min.y, -c.z);
   const g = new THREE.Group();
   g.add(obj);
+  g.rotation.y = Math.PI; // в Roblox «перед» модели смотрит в −Z — разворачиваем к камере
   g.userData.height = (box.max.y - box.min.y);
   return g;
 }
@@ -340,9 +341,9 @@ const viewer = (() => {
     controls.target.set(0, ty, 0);
     const vf = THREE.MathUtils.degToRad(camera.fov);
     const hf = 2 * Math.atan(Math.tan(vf / 2) * camera.aspect);
-    const r = Math.max(1.6, hgt * 0.62 + 0.3);
-    const d = Math.max(r / Math.sin(vf / 2), r / Math.sin(hf / 2)) * 1.05;
-    camera.position.copy(controls.target).add(new THREE.Vector3(0.55, 0.38, 0.8).setLength(d));
+    const r = Math.max(1.2, hgt * 0.6);
+    const d = Math.max(r / Math.sin(vf / 2), r / Math.sin(hf / 2)) * 1.08;
+    camera.position.copy(controls.target).add(new THREE.Vector3(0.5, 0.3, 0.85).setLength(d));
     controls.update();
   }
   async function load(i) {
