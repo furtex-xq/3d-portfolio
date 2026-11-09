@@ -189,8 +189,8 @@ function initTour() {
     const r = 1.75;
     let d;
     if (isMobile()) {
-      d = Math.max(r / Math.sin(hf / 2) * 1.02, r / Math.sin(vf / 2) * 1.9);
-      camera.setViewOffset(w, h, 0, h * 0.2, w, h);
+      d = Math.max(r / Math.sin(hf / 2) * 1.12, r / Math.sin(vf / 2) * 2.4);
+      camera.setViewOffset(w, h, 0, h * 0.27, w, h);
     } else {
       d = Math.max(r / Math.sin(vf / 2) * 1.05, r / Math.sin(hf / 2) * 2);
       camera.setViewOffset(w, h, -w * 0.17, 0, w, h);

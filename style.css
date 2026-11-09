@@ -310,6 +310,9 @@ dialog::backdrop { background: rgba(10, 7, 20, .82); backdrop-filter: blur(6px);
   .lead { font-size: 16px !important; }
   .cta-row { margin-top: 22px; }
   .cta-row .btn { flex: 1 1 100%; }
+  .cta-row .btn-ghost { display: none; }
+  .hero .eyebrow { margin-bottom: 10px; }
+  .stage-word { top: 22%; }
   .scroll-cue { display: none; }
   .stage-hint { left: var(--gutter); right: auto; top: calc(56px + env(safe-area-inset-top)); bottom: auto; }
   .stage-count { left: auto; right: var(--gutter); top: calc(62px + env(safe-area-inset-top)); bottom: auto; }
