@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Cheeks Dynamic Head — 3D превью</title>
+<link rel="icon" href="../../assets/favicon.svg">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+} }
+</script>
+<style>
+  :root { --bg1:#fbeef4; --bg2:#ead9f2; --ink:#2a2233; --muted:#7a6c84; --acc:#e05a9a; --card:rgba(255,255,255,.72); }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:radial-gradient(120% 90% at 50% 20%, var(--bg1), var(--bg2)); color:var(--ink);
+    font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; overflow:hidden; }
+  #view { position:fixed; inset:0; }
+  header { position:fixed; top:16px; left:16px; right:16px; display:flex; justify-content:space-between; align-items:flex-start; gap:12px; pointer-events:none; }
+  .title { background:var(--card); backdrop-filter:blur(10px); border-radius:14px; padding:10px 14px; box-shadow:0 6px 24px rgba(80,40,90,.12); }
+  .title b { display:block; font-size:16px; }
+  .title span { color:var(--muted); font-size:13px; }
+  .brand { background:var(--card); backdrop-filter:blur(10px); border-radius:14px; padding:10px 14px; font-weight:700; letter-spacing:.06em; font-size:13px; }
+  .bar { position:fixed; left:50%; bottom:20px; transform:translateX(-50%); display:flex; gap:8px; flex-wrap:wrap; justify-content:center;
+    background:var(--card); backdrop-filter:blur(10px); border-radius:16px; padding:8px; box-shadow:0 6px 24px rgba(80,40,90,.14);
+    width:max-content; max-width:calc(100% - 32px); }
+  @media (max-width:600px) {
+    .bar { bottom:16px; gap:6px; padding:6px; }
+    .bar button { flex:1 1 calc(50% - 6px); padding:10px 8px; font-size:13px; }
+    .bar button:first-child { flex-basis:100%; }
+    .hint { display:none; }
+    .title b { font-size:15px; } .title span { font-size:12px; }
+  }
+  button { border:0; border-radius:11px; padding:10px 14px; background:#fff; color:var(--ink); font:600 14px system-ui,sans-serif; cursor:pointer; }
+  button.on { background:var(--acc); color:#fff; }
+  .hint { position:fixed; bottom:82px; left:0; right:0; text-align:center; color:var(--muted); font-size:12px; pointer-events:none; }
+  #load { position:fixed; inset:0; display:grid; place-items:center; color:var(--muted); font-weight:600; }
+</style>
+</head>
+<body>
+<div id="view"></div>
+<div id="load">Загрузка модели…</div>
+<header>
+  <div class="title"><b>Cheeks Dynamic Head</b><span>Превью · 3 968 треугольников · мимика</span></div>
+  <div class="brand">ANSARO</div>
+</header>
+<div class="hint">Крути мышкой или пальцем · колесо / щипок — приблизить</div>
+<div class="bar">
+  <button id="bAuto" class="on">Живая мимика</button>
+  <button id="bBlink">Моргнуть</button>
+  <button id="bTalk">Разговор</button>
+  <button id="bSpin" class="on">Вращение</button>
+  <button id="bFront">Спереди</button>
+</div>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const el = document.getElementById('view');
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+el.appendChild(renderer.domElement);
+const scene = new THREE.Scene();
+scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
+const key = new THREE.DirectionalLight(0xfff4f0, 1.4); key.position.set(-2, 3, 4); scene.add(key);
+const rim = new THREE.DirectionalLight(0xe8e0ff, 0.8); rim.position.set(3, 2, -3); scene.add(rim);
+const camera = new THREE.PerspectiveCamera(30, innerWidth / innerHeight, 0.05, 100);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.minDistance = 1.2; controls.maxDistance = 12; controls.enablePan = false;
+controls.autoRotate = true; controls.autoRotateSpeed = 1.2;
+
+// мягкая тень под головой
+const shadowTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 128; const g = c.getContext('2d');
+  const gr = g.createRadialGradient(64, 64, 4, 64, 64, 64); gr.addColorStop(0, 'rgba(90,40,90,.35)'); gr.addColorStop(1, 'rgba(90,40,90,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 128, 128); return new THREE.CanvasTexture(c); })();
+
+let mesh = null, blinkI = -1, talkI = -1;
+const draco = new DRACOLoader().setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/libs/draco/gltf/');
+new GLTFLoader().setDRACOLoader(draco).load('head.glb', g => {
+  const root = g.scene;
+  root.traverse(o => { if (o.isMesh && o.morphTargetDictionary) { mesh = o; blinkI = o.morphTargetDictionary.Blink; talkI = o.morphTargetDictionary.Talk; } });
+  const box = new THREE.Box3().setFromObject(root); const c = box.getCenter(new THREE.Vector3()); const s = box.getSize(new THREE.Vector3());
+  root.position.sub(c); scene.add(root);
+  const sh = new THREE.Mesh(new THREE.PlaneGeometry(s.x * 1.6, s.x * 1.6), new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false }));
+  sh.rotation.x = -Math.PI / 2; sh.position.y = -s.y / 2 - 0.02; scene.add(sh);
+  // расстояние камеры: голова целиком влезает и по высоте, и по ширине экрана
+  const fitDist = () => {
+    const v = THREE.MathUtils.degToRad(camera.fov) / 2, hfov = Math.atan(Math.tan(v) * camera.aspect);
+    const narrow = 1;
+    return Math.max((s.y * 0.75) / Math.tan(v), (s.x * 0.78 * narrow) / Math.tan(hfov)) + s.z / 2;
+  };
+  window.__fit = fitDist;
+  camera.position.set(0, s.y * 0.15, fitDist()); controls.target.set(0, 0, 0); controls.update();
+  window.__front = () => { camera.position.set(0, s.y * 0.05, fitDist()); controls.target.set(0, 0, 0); };
+  document.getElementById('load').remove();
+}, undefined, () => { document.getElementById('load').textContent = 'Не удалось загрузить модель'; });
+
+// мимика: плавные значения morph targets
+const st = { auto: true, blink: 0, talk: 0, blinkT: -1, talkT: -1, nextBlink: 1.5 };
+const $ = id => document.getElementById(id);
+const toggle = (b, v) => b.classList.toggle('on', v);
+$('bAuto').onclick = () => { st.auto = !st.auto; toggle($('bAuto'), st.auto); };
+$('bBlink').onclick = () => { st.blinkT = 0; };
+$('bTalk').onclick = () => { st.talkT = 0; };
+$('bSpin').onclick = () => { controls.autoRotate = !controls.autoRotate; toggle($('bSpin'), controls.autoRotate); };
+$('bFront').onclick = () => { controls.autoRotate = false; toggle($('bSpin'), false); window.__front && window.__front(); };
+
+const clock = new THREE.Clock(); let t = 0;
+function animate() {
+  const dt = Math.min(clock.getDelta(), 0.05); t += dt;
+  if (st.auto) {
+    st.nextBlink -= dt;
+    if (st.nextBlink <= 0) { st.blinkT = 0; st.nextBlink = 2.2 + Math.random() * 2.5; }
+    if (st.talkT < 0 && Math.random() < dt * 0.12) st.talkT = 0;
+  }
+  // моргание: 0.28 c
+  if (st.blinkT >= 0) { st.blinkT += dt; const p = st.blinkT / 0.28; st.blink = p < 1 ? Math.sin(p * Math.PI) : 0; if (p >= 1) st.blinkT = -1; }
+  // разговор: 1.6 c «слогами»
+  if (st.talkT >= 0) { st.talkT += dt; const p = st.talkT / 1.6; st.talk = p < 1 ? Math.abs(Math.sin(st.talkT * 11)) * Math.sin(p * Math.PI) : 0; if (p >= 1) st.talkT = -1; }
+  if (mesh) { if (blinkI >= 0) mesh.morphTargetInfluences[blinkI] = st.blink; if (talkI >= 0) mesh.morphTargetInfluences[talkI] = st.talk; }
+  controls.update(); renderer.render(scene, camera); requestAnimationFrame(animate);
+}
+animate();
+addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
+</script>
+</body>
+</html>
